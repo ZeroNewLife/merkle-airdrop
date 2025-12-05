@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merkle Tree Explained</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+        
+        .tree-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            min-width: 800px;
+        }
+        
+        .tree-level {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .node {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .node.root {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+        
+        .node.leaf {
+            background: #e8f4f8;
+            border-color: #4CAF50;
+        }
+        
+        .node.proof {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .node.selected {
+            background: #d4edda;
+            border-color: #28a745;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+        }
+        
+        .node-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .node-hash {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            word-break: break-all;
+            color: #333;
+        }
+        
+        .node.root .node-hash {
+            color: white;
+        }
+        
+        .connector {
+            position: absolute;
+            height: 30px;
+            width: 2px;
+            background: #667eea;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .explanation {
+            background: #e8f4f8;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .highlight {
+            color: #61afef;
+            font-weight: bold;
+        }
+        
+        .example-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .example-title {
+            font-weight: bold;
+            color: #d84315;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .value-box {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .value-label {
+            font-weight: bold;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        
+        .value-content {
+            font-family: 'Courier New', monospace;
+            color: #333;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        
+        .interactive-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            background: white;
+            color: #f5576c;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 2px solid #666;
+        }
+        
+        .legend-box.root {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .legend-box.leaf {
+            background: #e8f4f8;
+            border-color: #4CAF50;
+        }
+        
+        .legend-box.proof {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .legend-box.selected {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .arrows {
+            font-size: 24px;
+            color: #667eea;
+            text-align: center;
+            margin: -20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌳 Merkle Tree: Полное объяснение</h1>
+        
+        <div class="section">
+            <h2>Что такое Merkle Tree (Дерево Меркла)?</h2>
+            <div class="explanation">
+                <p><strong>Merkle Tree</strong> - это криптографическая структура данных, которая позволяет эффективно и безопасно проверить, что конкретный элемент входит в набор данных, без необходимости хранить весь набор.</p>
+                <br>
+                <p><strong>Основная идея:</strong> Берем много данных, хешируем их попарно, затем хешируем результаты, и так далее, пока не получим один корневой хеш (root).</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Визуализация Merkle Tree</h2>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-box root"></div>
+                    <span>Root (корень)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box leaf"></div>
+                    <span>Leaf (лист)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box proof"></div>
+                    <span>Proof (доказательство)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box selected"></div>
+                    <span>Проверяемый лист</span>
+                </div>
+            </div>
+            
+            <div class="tree-container">
+                <div class="tree">
+                    <!-- Level 0: Root -->
+                    <div class="tree-level">
+                        <div class="node root">
+                            <div class="node-label">ROOT</div>
+                            <div class="node-hash" id="root">0xabcd1234...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="arrows">↙ ↘</div>
+                    
+                    <!-- Level 1 -->
+                    <div class="tree-level">
+                        <div class="node">
+                            <div class="node-label">Hash(AB)</div>
+                            <div class="node-hash">0x1111...</div>
+                        </div>
+                        <div class="node proof">
+                            <div class="node-label">Hash(CD) - PROOF[0]</div>
+                            <div class="node-hash">0x2222...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="arrows">↙ ↘ ↙ ↘</div>
+                    
+                    <!-- Level 2: Leaves -->
+                    <div class="tree-level">
+                        <div class="node leaf selected">
+                            <div class="node-label">Leaf A - ПРОВЕРЯЕМ</div>
+                            <div class="node-hash">0xaaaa...</div>
+                        </div>
+                        <div class="node leaf proof">
+                            <div class="node-label">Leaf B - PROOF[1]</div>
+                            <div class="node-hash">0xbbbb...</div>
+                        </div>
+                        <div class="node leaf">
+                            <div class="node-label">Leaf C</div>
+                            <div class="node-hash">0xcccc...</div>
+                        </div>
+                        <div class="node leaf">
+                            <div class="node-label">Leaf D</div>
+                            <div class="node-hash">0xdddd...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Разбор параметров</h2>
+            
+            <div class="example-box">
+                <div class="example-title">1️⃣ bytes32 leaf (Лист)</div>
+                <div class="value-box">
+                    <div class="value-label">Что это?</div>
+                    <div class="value-content">Хеш данных конкретного пользователя/элемента, который мы хотим проверить</div>
+                </div>
+                <div class="value-box">
+                    <div class="value-label">Пример:</div>
+                    <div class="value-content">
+                        leaf = keccak256(abi.encodePacked(address, amount))<br>
+                        leaf = keccak256(abi.encodePacked(0x742d35Cc6634C0532925a3b844Bc454e4438f44e, 1000))
+                    </div>
+                </div>
+                <div class="value-box">
+                    <div class="value-label">Значение:</div>
+                    <div class="value-content">0xaaaa1111bbbb2222cccc3333dddd4444eeee5555ffff6666aaaa7777bbbb8888</div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">2️⃣ bytes32 root (Корень)</div>
+                <div class="value-box">
+                    <div class="value-label">Что это?</div>
+                    <div class="value-content">Единственный хеш на вершине дерева, который представляет ВСЕ данные в дереве</div>
+                </div>
+                <div class="value-box">
+                    <div class="value-label">Где хранится?</div>
+                    <div class="value-content">В смарт-контракте (on-chain). Например:<br>
+                    bytes32 public merkleRoot = 0xabcd1234...;</div>
+                </div>
+                <div class="value-box">
+                    <div class="value-label">Зачем?</div>
+                    <div class="value-content">Вместо хранения 10,000 адресов в контракте (очень дорого!), храним только 1 хеш (32 байта)</div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">3️⃣ bytes32[] memory proof (Доказательство)</div>
+                <div class="value-box">
+                    <div class="value-label">Что это?</div>
+                    <div class="value-content">Массив хешей, необходимых для восстановления пути от листа до корня</div>
+                </div>
+                <div class="value-box">
+                    <div class="value-label">Пример proof для Leaf A:</div>
+                    <div class="value-content">
+                        proof[0] = 0x2222... (Hash(CD) - брат родителя)<br>
+                        proof[1] = 0xbbbb... (Leaf B - брат самого листа)
+                    </div>
+                </div>
+                <div class="value-box">
+                    <div class="value-label">Где генерируется?</div>
+                    <div class="value-content">Off-chain (на сервере или фронтенде), отправляется пользователем в транзакции</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Как работает проверка?</h2>
+            
+            <div class="code-block">
+<span class="highlight">function</span> verify(
+    <span class="highlight">bytes32[]</span> memory proof,
+    <span class="highlight">bytes32</span> root,
+    <span class="highlight">bytes32</span> leaf
+) <span class="highlight">internal pure returns</span> (<span class="highlight">bool</span>) {
+    <span class="highlight">bytes32</span> computedHash = leaf;
+    
+    <span class="highlight">for</span> (<span class="highlight">uint256</span> i = 0; i < proof.length; i++) {
+        <span class="highlight">bytes32</span> proofElement = proof[i];
+        
+        <span class="highlight">if</span> (computedHash <= proofElement) {
+            <span class="highlight">// Hash(current + proofElement)</span>
+            computedHash = keccak256(
+                abi.encodePacked(computedHash, proofElement)
+            );
+        } <span class="highlight">else</span> {
+            <span class="highlight">// Hash(proofElement + current)</span>
+            computedHash = keccak256(
+                abi.encodePacked(proofElement, computedHash)
+            );
+        }
+    }
+    
+    <span class="highlight">return</span> computedHash == root;
+}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Пошаговая проверка Leaf A</h2>
+            
+            <div class="explanation">
+                <p><strong>Шаг 0:</strong> Начинаем с leaf</p>
+                <p style="font-family: monospace; margin-left: 20px;">computedHash = 0xaaaa... (Leaf A)</p>
+                <br>
+                
+                <p><strong>Шаг 1:</strong> Берем proof[1] = 0xbbbb... (Leaf B)</p>
+                <p style="font-family: monospace; margin-left: 20px;">computedHash = keccak256(0xaaaa... + 0xbbbb...)</p>
+                <p style="font-family: monospace; margin-left: 20px;">computedHash = 0x1111... (Hash(AB))</p>
+                <br>
+                
+                <p><strong>Шаг 2:</strong> Берем proof[0] = 0x2222... (Hash(CD))</p>
+                <p style="font-family: monospace; margin-left: 20px;">computedHash = keccak256(0x1111... + 0x2222...)</p>
+                <p style="font-family: monospace; margin-left: 20px;">computedHash = 0xabcd1234... (ROOT)</p>
+                <br>
+                
+                <p><strong>Шаг 3:</strong> Сравниваем с сохраненным root</p>
+                <p style="font-family: monospace; margin-left: 20px;">computedHash == root ✅ ПРОВЕРКА УСПЕШНА!</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Реальный пример использования</h2>
+            
+            <div class="code-block">
+<span class="highlight">// СМАРТ-КОНТРАКТ</span>
+contract Airdrop {
+    <span class="highlight">bytes32</span> public merkleRoot;
+    
+    mapping(address => bool) public claimed;
+    
+    constructor(<span class="highlight">bytes32</span> _merkleRoot) {
+        merkleRoot = _merkleRoot;
+    }
+    
+    <span class="highlight">function</span> claim(
+        <span class="highlight">uint256</span> amount,
+        <span class="highlight">bytes32[]</span> calldata proof
+    ) external {
+        require(!claimed[msg.sender], "Already claimed");
+        
+        <span class="highlight">// Создаем leaf из данных пользователя</span>
+        <span class="highlight">bytes32</span> leaf = keccak256(
+            abi.encodePacked(msg.sender, amount)
+        );
+        
+        <span class="highlight">// Проверяем, что лист в дереве</span>
+        require(
+            MerkleProof.verify(proof, merkleRoot, leaf),
+            "Invalid proof"
+        );
+        
+        claimed[msg.sender] = true;
+        <span class="highlight">// Отправляем токены...</span>
+    }
+}
+
+<span class="highlight">// ФРОНТЕНД (JavaScript)</span>
+const { MerkleTree } = require('merkletreejs');
+const keccak256 = require('keccak256');
+
+<span class="highlight">// 1. Создаем список всех участников airdrop</span>
+const whitelist = [
+    { address: "0x742d35...", amount: 1000 },
+    { address: "0x123456...", amount: 2000 },
+    { address: "0xabcdef...", amount: 1500 },
+    <span class="highlight">// ... еще 9997 адресов</span>
+];
+
+<span class="highlight">// 2. Генерируем листья</span>
+const leaves = whitelist.map(x => 
+    keccak256(ethers.solidityPacked(
+        ['address', 'uint256'],
+        [x.address, x.amount]
+    ))
+);
+
+<span class="highlight">// 3. Строим дерево</span>
+const tree = new MerkleTree(leaves, keccak256, { sortPairs: true });
+
+<span class="highlight">// 4. Получаем root (сохраняем в контракт)</span>
+const root = tree.getRoot();
+
+<span class="highlight">// 5. Для конкретного пользователя генерируем proof</span>
+const userLeaf = keccak256(
+    ethers.solidityPacked(
+        ['address', 'uint256'],
+        ["0x742d35...", 1000]
+    )
+);
+const proof = tree.getHexProof(userLeaf);
+
+<span class="highlight">// 6. Пользователь вызывает claim(1000, proof)</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Преимущества Merkle Tree</h2>
+            
+            <div class="explanation">
+                <p>✅ <strong>Экономия газа:</strong> Хранить 1 root (32 байта) вместо 10,000 адресов</p>
+                <p>✅ <strong>Конфиденциальность:</strong> Пользователь знает только свой leaf и proof, не видит других</p>
+                <p>✅ <strong>Эффективность:</strong> Проверка O(log n) - для 10,000 элементов нужно ~14 хешей</p>
+                <p>✅ <strong>Безопасность:</strong> Невозможно подделать proof без знания всего дерева</p>
+            </div>
+        </div>
+
+        <div class="interactive-section">
+            <h2 style="margin-bottom: 20px;">📊 Сравнение подходов</h2>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                <p><strong>Без Merkle Tree (хранить все адреса):</strong></p>
+                <p>• 10,000 адресов × 20 байт = 200,000 байт</p>
+                <p>• Gas стоимость: ~4,000,000 gas = $500-1000</p>
+                <br>
+                <p><strong>С Merkle Tree:</strong></p>
+                <p>• 1 root × 32 байта = 32 байта</p>
+                <p>• Gas стоимость: ~20,000 gas = $2-5</p>
+                <br>
+                <p style="font-size: 24px; text-align: center; margin-top: 20px;">💰 Экономия: 99.5%</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Резюме</h2>
+            <div class="explanation">
+                <p><strong>leaf</strong> = хеш данных конкретного пользователя (что проверяем)</p>
+                <p><strong>proof</strong> = массив "братьев" на пути к корню (как доказываем)</p>
+                <p><strong>root</strong> = единственный хеш всего дерева (с чем сравниваем)</p>
+                <br>
+                <p><em>Merkle Tree позволяет эффективно доказать "этот элемент входит в набор данных" без хранения всего набора on-chain.</em></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
