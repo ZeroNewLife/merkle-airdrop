@@ -1,8 +1,5 @@
 основные записи как и следует из названия по мерклу будут хранится тут 
 
-![Merkle check](image.png)
+![Hash](image/merkleHash.png)
 
-
-
-
-Так подробный разбор работы концепсий меркла хранятся в папке frontend [вот оно кстати ](frontend/mercle.html)
+Так подробный разбор работы концепсий меркла хранятся в папке frontend [Site](frontend/mercle.html)
