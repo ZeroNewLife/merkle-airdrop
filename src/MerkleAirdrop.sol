@@ -13,12 +13,12 @@ contract MerkleAirdrop {
     event Claimed(address indexed account, uint256 amount);
 
     address[] claemers;
-    bytes32 private immutable I_MERCLE_ROOT;
+    bytes32 private immutable I_MERKLE_ROOT;
     IERC20 private immutable I_AIRDROP_TOKEN;
     mapping(address claimer => bool claimed) private s_hasClaimed;
 
-    constructor(bytes32 mercleRoot, IERC20 airdropToken) {
-        I_MERCLE_ROOT = mercleRoot;
+    constructor(bytes32 merkleRoot, IERC20 airdropToken) {
+        I_MERKLE_ROOT = merkleRoot;
         I_AIRDROP_TOKEN = airdropToken;
     }
 
@@ -28,10 +28,18 @@ contract MerkleAirdrop {
         }
 
         bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(account, amount))));
-        if (!MerkleProof.verify(merkleProof, I_MERCLE_ROOT, leaf)) {
+        if (!MerkleProof.verify(merkleProof, I_MERKLE_ROOT, leaf)) {
             revert MerkleAirdrop__InvalidProof();
         }
         emit Claimed(account, amount);
         I_AIRDROP_TOKEN.safeTransfer(account, amount);
+    }
+
+    function getAirdropToken() external view returns (IERC20) {
+        return I_AIRDROP_TOKEN;
+    }
+
+    function getMerkleRoot() external view returns (bytes32) {
+        return I_MERKLE_ROOT;
     }
 }

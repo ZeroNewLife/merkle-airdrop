@@ -1,0 +1,93 @@
+[
+    {
+        "inputs": [
+            "0x29A8480583c9a312844130d0683e0039129B51dC",
+            "25000000000000000000"
+        ],
+        "proof": [
+            "0x2a4fb33c96bc8753335a308414573b240b934f1a856374609fcf9eecfcf8708a",
+            "0xbdcf1d696c1ac7d44bc34276454136ba780d913285b8ac18add76a6eed25033f",
+            "0x7ff2c8eaa980d687046bba18bdd4f9d6fd280a2edd939977595faebaa9bc3c32"
+        ],
+        "root": "0xc08e171be66d373c096298857a4161fdd009165f46cebd423f7d2ab17655e0c9",
+        "leaf": "0x956a53a8895d8af34b9f27212de0b71e646b2b050c6267b861fd1ee59e471fba"
+    },
+    {
+        "inputs": [
+            "0xD8961597b7324701211137eeDfdc2892D845c1e8",
+            "25000000000000000000"
+        ],
+        "proof": [
+            "0x956a53a8895d8af34b9f27212de0b71e646b2b050c6267b861fd1ee59e471fba",
+            "0xbdcf1d696c1ac7d44bc34276454136ba780d913285b8ac18add76a6eed25033f",
+            "0x7ff2c8eaa980d687046bba18bdd4f9d6fd280a2edd939977595faebaa9bc3c32"
+        ],
+        "root": "0xc08e171be66d373c096298857a4161fdd009165f46cebd423f7d2ab17655e0c9",
+        "leaf": "0x2a4fb33c96bc8753335a308414573b240b934f1a856374609fcf9eecfcf8708a"
+    },
+    {
+        "inputs": [
+            "0xD7387660A977f2eaD6277c6e021e2Df1D143cd32",
+            "25000000000000000000"
+        ],
+        "proof": [
+            "0x86048a5eebb02377cf015dac882b99c12fb88ceb170dfc8779725299207983de",
+            "0x16de93ddeaa0ff639df0cf8cb62f51dd1b2ef8f5eddeff4fb8b6685093bd4b6f",
+            "0x7ff2c8eaa980d687046bba18bdd4f9d6fd280a2edd939977595faebaa9bc3c32"
+        ],
+        "root": "0xc08e171be66d373c096298857a4161fdd009165f46cebd423f7d2ab17655e0c9",
+        "leaf": "0x20f28f705fa205df29e68a1889c953429b35502d57590f3f855ae01185df236c"
+    },
+    {
+        "inputs": [
+            "0xB6D52a12aA2a0D45Fc89321093376d43A61b3911",
+            "25000000000000000000"
+        ],
+        "proof": [
+            "0x20f28f705fa205df29e68a1889c953429b35502d57590f3f855ae01185df236c",
+            "0x16de93ddeaa0ff639df0cf8cb62f51dd1b2ef8f5eddeff4fb8b6685093bd4b6f",
+            "0x7ff2c8eaa980d687046bba18bdd4f9d6fd280a2edd939977595faebaa9bc3c32"
+        ],
+        "root": "0xc08e171be66d373c096298857a4161fdd009165f46cebd423f7d2ab17655e0c9",
+        "leaf": "0x86048a5eebb02377cf015dac882b99c12fb88ceb170dfc8779725299207983de"
+    },
+    {
+        "inputs": [
+            "0x9F03ED8BD3E308c5e92E5826bC90fB645853e9e1",
+            "25000000000000000000"
+        ],
+        "proof": [
+            "0x461a6d90b1b05698ca49182b2193895d9034616952360d3aea47435e8fffb552",
+            "0xfc19450a5dbe7ef4a90490449e69ce9c9d67497f2e8e4d521d4ff9850937b153",
+            "0xf35b3f5b344ce56e8b5f25184b214f5d0a719c651e249009f4cc581a061a759c"
+        ],
+        "root": "0xc08e171be66d373c096298857a4161fdd009165f46cebd423f7d2ab17655e0c9",
+        "leaf": "0x9e1268803c108031a0130b169a2b79e10ae1679def1bcdd7e46d5a01d8ad8afc"
+    },
+    {
+        "inputs": [
+            "0xD843CBe0bdeE3E884Fd32cE4942219830D5944DA",
+            "25000000000000000000"
+        ],
+        "proof": [
+            "0x9e1268803c108031a0130b169a2b79e10ae1679def1bcdd7e46d5a01d8ad8afc",
+            "0xfc19450a5dbe7ef4a90490449e69ce9c9d67497f2e8e4d521d4ff9850937b153",
+            "0xf35b3f5b344ce56e8b5f25184b214f5d0a719c651e249009f4cc581a061a759c"
+        ],
+        "root": "0xc08e171be66d373c096298857a4161fdd009165f46cebd423f7d2ab17655e0c9",
+        "leaf": "0x461a6d90b1b05698ca49182b2193895d9034616952360d3aea47435e8fffb552"
+    },
+    {
+        "inputs": [
+            "0x6CA6d1e2D5347Bfab1d91e883F1915560e09129D",
+            "25000000000000000000"
+        ],
+        "proof": [
+            "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "0x62bc4537c5458fe382c7ac02d34807515c4763e025131d336b1cfadbc780c1eb",
+            "0xf35b3f5b344ce56e8b5f25184b214f5d0a719c651e249009f4cc581a061a759c"
+        ],
+        "root": "0xc08e171be66d373c096298857a4161fdd009165f46cebd423f7d2ab17655e0c9",
+        "leaf": "0xd1445c931158119b00449ffcac3c947d028c0c359c34a6646d95962b3b55c6ad"
+    }
+]
