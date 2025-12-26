@@ -2,19 +2,29 @@
 pragma solidity ^0.8.30;
 
 import {Script} from "forge-std/Script.sol";
-import {MerkleAirdrop} from "../src/MerkleAirdrop.sol";
+import {MerkleAirdrop,IERC20} from "../src/MerkleAirdrop.sol";
 import {ZeroToken} from "../src/ZeroToken.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 
 contract DeployMerkleAirdrop is Script {
 
-    function deployMerkle() public returns (MerkleAirdrop, ZeroToken) {
-        vm.startBroadcast();
-        Zerotoken token = new ZeroToken();
-        MerkleAirdrop merkleAirdrop = new MerkleAirdrop();
+    bytes32 public ROOT = 0xc08e171be66d373c096298857a4161fdd009165f46cebd423f7d2ab17655e0c9;
 
-        ZeroToken token = new
-    function run() external returns (MerkleAirdrop, ZeroToken) {
-        return deployMerkle();
+    uint256 public AMOUNT_TO_TRANSFER = 7 * (25 * 1e18);
+
+    function deployMerkleAirdrop() public returns (MerkleAirdrop, ZeroToken) {
+        vm.startBroadcast();
+        ZeroToken zeroToken = new ZeroToken();
+        MerkleAirdrop airdrop = new MerkleAirdrop(ROOT, IERC20(zeroToken));
+        // Send Bagel tokens -> Merkle Air Drop contract
+        zeroToken.mint(zeroToken.owner(), AMOUNT_TO_TRANSFER);
+        IERC20(zeroToken).transfer(address(airdrop), AMOUNT_TO_TRANSFER);
+        vm.stopBroadcast();
+        return (airdrop, zeroToken);        
+        
+    }
+
+    function run() external  returns (MerkleAirdrop, ZeroToken) {
+        return deployMerkleAirdrop();
     }
 }

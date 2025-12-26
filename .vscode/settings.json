@@ -1,0 +1,23 @@
+{
+  // === ГЛАВНОЕ ===
+  "solidity.excludePaths": [
+    "lib/**",
+    "out/**",
+    "target/**",
+    "node_modules/**"
+  ],
+
+  // === Foundry ===
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+  "solidity.packageDefaultDependenciesContractsDirectory": "src",
+
+  // === Анализ ===
+  "solidity.validation.enable": true,
+  "solidity.validation.delay": 0,
+  "solidity.validation.compileUsingLocalVersion": true,
+  "solidity.validation.compileWithRemoteVersion": false,
+
+  // === Удобство ===
+  "solidity.formatter": "forge",
+  "editor.formatOnSave": true
+}
