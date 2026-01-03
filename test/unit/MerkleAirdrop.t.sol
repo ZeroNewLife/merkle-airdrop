@@ -16,9 +16,10 @@ contract DeployMerkleTest is Test {
     bytes32 proofThree = 0xf35b3f5b344ce56e8b5f25184b214f5d0a719c651e249009f4cc581a061a759c;
     bytes32[] public PROOF = [proofOne, proofTwo, proofThree];
     address user;
+    address gasPayer;
     uint256 privKey;
-    uint256 AMOUNT = 25 * 1e18;
-    uint256 AMOUNT_MINT = AMOUNT * 4;
+    uint256 AMOUNT_TO_CLAIM = 25 * 1e18;
+    uint256 AMOUNT_MINT = AMOUNT_TO_CLAIM * 4;
 
     function setUp() public {
         zeroToken = new ZeroToken();
@@ -26,15 +27,20 @@ contract DeployMerkleTest is Test {
         zeroToken.mint(zeroToken.owner(), AMOUNT_MINT);
         zeroToken.transfer(address(merkleAirdrop), AMOUNT_MINT);
         (user, privKey) = makeAddrAndKey("user");
+
+        gasPayer=makeAddr("gasPayer");
     }
 
     function testUserCanClaim() public {
         uint256 startingBalance = zeroToken.balanceOf(user);
+        bytes32 diger = merkleAirdrop.getMessage(user, AMOUNT_TO_CLAIM);
+
         // Test user can claim their airdrop
-        vm.prank(user);
-        merkleAirdrop.claim(user, AMOUNT, PROOF);
+                vm.prank(gasPayer);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(privKey, diger);
+        merkleAirdrop.claim(user, AMOUNT_TO_CLAIM, PROOF, v,r,s);
 
         uint256 endingBalance = zeroToken.balanceOf(user);
-        assertEq(endingBalance - startingBalance, AMOUNT);
+        assertEq(endingBalance - startingBalance, AMOUNT_TO_CLAIM);
     }
 }
