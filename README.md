@@ -734,7 +734,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - 📧 Email: workzero02@gmail.com
-- 🐦 X: [@YourTwitter]([https://x.com/zeroEthBuilder])
+- 🐦 X: [@zeroEthBuilder]([https://x.com/zeroEthBuilder])
 
 ---
 
@@ -742,7 +742,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ by ZeroWeb3**
 
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github)](https://github.com/yourusername)
-[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/yourusername)
+[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter)](https://x.com/zeroEthBuilder)
 
 </div>
