@@ -733,9 +733,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 Email: your.email@example.com
-- 🐦 Twitter: [@YourTwitter](https://twitter.com/YourTwitter)
-- 💬 Discord: [Join our server](https://discord.gg/yourinvite)
+- 📧 Email: workzero02@gmail.com
+- 🐦 X: [@YourTwitter]([https://x.com/zeroEthBuilder])
 
 ---
 
